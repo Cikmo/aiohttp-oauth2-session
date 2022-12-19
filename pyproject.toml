@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "OAuth2Session"
+version = "0.1.0"
+description = ""
+authors = ["Cikmo <59421913+Cikmo@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+oauthlib = "^3.2.2"
+aiohttp = "^3.8.3"
+
+
+[tool.poetry.group.dev.dependencies]
+black = {version = "^23.1a1", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
