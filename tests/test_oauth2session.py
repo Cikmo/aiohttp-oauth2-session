@@ -1,10 +1,9 @@
 import pytest
 
+
 from aiohttp import ClientSession
 
-from OAuth2Session import OAuth2Session
-
-from unittest import mock
+from aiohttp_oauth_session import OAuth2Session
 
 
 @pytest.fixture
@@ -86,48 +85,16 @@ def test_authorization_url():
 async def test_fetch_token():
     # Create a mock token object
     token = {"access_token": "mock_access_token", "token_type": "mock_token_type"}
-
-    # Set up the test parameters
-    token_url = "https://example.com/token"
-    code = "mock_code"
-    authorization_response = "https://example.com/redirect"
-    body = ""
-    auth = None
-    username = "mock-username"
-    password = "mock-password"
-    method = "POST"
-    force_querystring = False
-    timeout = None
-    headers = {"Accept": "application/json"}
-    verify_ssl = True
-    proxy = None
-    include_client_id = None
     client_id = "mock-client-id"
-    client_secret = "mock-client-secret"
 
     # Create the object being tested
     object_being_tested = OAuth2Session(
         client_id=client_id,
         scope="test_scope",
-        redirect_uri="test_redirect_uri",
+        redirect_uri="https://example.com//api/callback",
+        token=token,
     )
 
-    # Call the method being tested
-    result = await object_being_tested.fetch_token(
-        token_url,
-        code,
-        authorization_response,
-        body,
-        auth,
-        username,
-        password,
-        method,
-        force_querystring,
-        timeout,
-        headers,
-        verify_ssl,
-        proxy,
-        include_client_id,
-        client_id,
-        client_secret,
-    )
+    object_being_tested.token = token
+
+    assert object_being_tested.access_token == "mock_access_token"

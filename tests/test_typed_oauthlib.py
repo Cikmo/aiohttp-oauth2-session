@@ -2,7 +2,7 @@ from typing import Iterable
 
 import pytest
 
-from OAuth2Session.typed_oauthlib import (
+from aiohttp_oauth_session.typed_oauthlib import (
     UNICODE_ASCII_CHARACTER_SET,
     generate_token,
     is_secure_transport,

@@ -101,7 +101,7 @@ class WebApplicationClient(_WebApplicationClient):
             state=state,
             code_challenge=code_challenge,
             code_challenge_method=code_challenge_method,
-            kwargs=kwargs,
+            **kwargs,
         )
 
     def parse_request_uri_response(
@@ -124,13 +124,13 @@ class WebApplicationClient(_WebApplicationClient):
             body=body,
             include_client_id=include_client_id,
             code_verifier=code_verifier,
-            kwargs=kwargs,
+            **kwargs,
         )
 
     def parse_request_body_response(
         self, body: str, scope: str | None = None, **kwargs: Any
     ) -> Token:
-        return super().parse_request_body_response(body, scope, kwargs)  # type: ignore
+        return super().parse_request_body_response(body, scope, **kwargs)  # type: ignore
 
     def prepare_refresh_body(
         self,
@@ -158,5 +158,5 @@ class WebApplicationClient(_WebApplicationClient):
             body=body,
             headers=headers,
             token_placement=token_placement,
-            kwargs=kwargs,
+            **kwargs,
         )
