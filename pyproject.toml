@@ -6,7 +6,7 @@ authors = ["Cikmo <59421913+Cikmo@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.10,<4.0"
 oauthlib = "^3.2.2"
 aiohttp = "^3.8.3"
 
@@ -14,6 +14,7 @@ aiohttp = "^3.8.3"
 [tool.poetry.group.dev.dependencies]
 black = {version = "^23.1a1", allow-prereleases = true}
 pytest = "^7.2.0"
+pytest-asyncio = "^0.20.3"
 
 [build-system]
 requires = ["poetry-core"]

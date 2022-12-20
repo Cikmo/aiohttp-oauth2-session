@@ -7,6 +7,7 @@ from OAuth2Session.typed_oauthlib import (
     generate_token,
     is_secure_transport,
     urldecode,
+    WebApplicationClient,
 )
 
 
@@ -83,3 +84,42 @@ class TestIsSecureTransport:
         """Test that the function returns True when OAUTHLIB_INSECURE_TRANSPORT is set"""
         monkeypatch.setenv("OAUTHLIB_INSECURE_TRANSPORT", "1")
         assert is_secure_transport("http://example.com") == True
+
+
+@pytest.fixture
+def web_application_client() -> WebApplicationClient:
+    client_id = "test_client_id"
+    return WebApplicationClient(client_id)
+
+
+def test_init(web_application_client: WebApplicationClient) -> None:
+    assert web_application_client.client_id == "test_client_id"
+    assert web_application_client.code is None
+    assert web_application_client.access_token is None
+    assert web_application_client.refresh_token is None
+
+
+# test typed WebApplicationClient class
+def test_populate_token_attributes(
+    web_application_client: WebApplicationClient,
+) -> None:
+    token = {
+        "access_token": "test_access_token",
+        "refresh_token": "test_refresh_token",
+        "token_type": "Bearer",
+        "expires_in": 3600,
+    }
+    web_application_client.populate_token_attributes(token)
+    assert web_application_client.access_token == "test_access_token"
+    assert web_application_client.refresh_token == "test_refresh_token"
+    assert web_application_client.token_type == "Bearer"
+    assert web_application_client.expires_in == 3600
+
+
+def test_parse_request_uri_response(
+    web_application_client: WebApplicationClient,
+) -> None:
+    uri = "https://test.com?code=test_code&state=test_state"
+    state = "test_state"
+    response = web_application_client.parse_request_uri_response(uri, state)
+    assert response == {"code": "test_code", "state": "test_state"}
