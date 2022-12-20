@@ -1,70 +1,38 @@
-"""OAuth2Support for aiohttp.ClientSession.
+"""OAuth2 support for aiohttp.ClientSession.
 Based on the requests_oauthlib class
-Original source: https://gist.github.com/kellerza/5ca798f49983bb702bc6e7a05ba53def
+Based on: https://gist.github.com/kellerza/5ca798f49983bb702bc6e7a05ba53def
 """
 
 import aiohttp
-from oauthlib.common import (
-    generate_token as _generate_token,  # type: ignore
-    urldecode as _urldecode,  # type: ignore
-    UNICODE_ASCII_CHARACTER_SET,
-)
+from typing import Callable, TypeVar, Any
+
+from .typed_oauthlib import generate_token, urldecode, is_secure_transport
+
 from oauthlib.oauth2 import (
     InsecureTransportError,
     LegacyApplicationClient,
     TokenExpiredError,
     WebApplicationClient,
-    is_secure_transport,
 )
 
-from typing import ByteString
 
+# Example token response
+# {
+#   "access_token": "6qrZcUqja7812RVdnEKjpzOL4CvHBFG",
+#   "token_type": "Bearer",
+#   "expires_in": 604800,
+#   "refresh_token": "D43f5y0ahjqew82jZ4NViEr2YafMKhue",
+#   "scope": "identify"
+# }
 
-### Typed wrappers for oauthlib methods ###
-# TODO: Move these to it's own module.
-def generate_token(length: int = 32, chars: str = UNICODE_ASCII_CHARACTER_SET) -> str:
-    """Typed wrapper for oauthlib.common.generate_token.
-
-    Generates a non-guessable OAuth token
-
-    OAuth (1 and 2) does not specify the format of tokens except that they
-    should be strings of random characters. Tokens should not be guessable
-    and entropy when generating the random characters is important. Which is
-    why SystemRandom is used instead of the default random.choice method.
-
-    Args:
-        length: Length of the token. Defaults to 32.
-        chars: Characters to use when generating the token. Defaults to ascii characters.
-
-    """
-    return _generate_token(length, chars)  # type: ignore
-
-
-def urldecode(query: str) -> list[ByteString]:
-    """Typed wrapper for oauthlib.common.urldecode.
-
-    Decode a query string in x-www-form-urlencoded format into a sequence
-    of two-element tuples.
-
-    Unlike urlparse.parse_qsl(..., strict_parsing=True) urldecode will enforce
-    correct formatting of the query string by validation. If validation fails
-    a ValueError will be raised. urllib.parse_qsl will only raise errors if
-    any of name-value pairs omits the equals sign.
-
-    Args:
-        query: The query string to decode.
-
-    """
-    return _urldecode(query)  # type: ignore
-
-
-### End of typed wrappers ###
+# Type aliases
+Token = dict[str, Any]
 
 
 class TokenUpdated(Warning):
     """Exception."""
 
-    def __init__(self, token):
+    def __init__(self, token: Token):
         super(TokenUpdated, self).__init__()
         self.token = token
 
@@ -137,7 +105,7 @@ class OAuth2Session(aiohttp.ClientSession):
 
         # Allow customizations for non compliant providers through various
         # hooks to adjust requests and responses.
-        self.compliance_hook = {
+        self.compliance_hook: dict[str, set[Callable[..., Any]]] = {
             "access_token_response": set(),
             "refresh_token_response": set(),
             "protected_request": set(),
