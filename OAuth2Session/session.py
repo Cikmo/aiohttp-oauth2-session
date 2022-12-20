@@ -98,7 +98,7 @@ class OAuth2Session(aiohttp.ClientSession):
         del self._client.client_id
 
     @property
-    def token(self) -> Token | None:
+    def token(self) -> Token:
         """Get the token."""
         return self._client.token
 

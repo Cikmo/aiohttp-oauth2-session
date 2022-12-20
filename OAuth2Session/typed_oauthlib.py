@@ -74,12 +74,12 @@ class WebApplicationClient(_WebApplicationClient):
     def __init__(self, client_id: str, code: str | None = None, **kwargs: Any) -> None:
         super().__init__(client_id, code, **kwargs)  # type: ignore
         self.client_id: str
-        self.token: Token | None
+        self.token: Token
         self.code: str | None
         self.access_token: str | None
 
-    def populate_token_attributes(self, response: Token) -> None:  # type: ignore
-        ...
+    def populate_token_attributes(self, response: Token) -> None:
+        super().populate_token_attributes(response)  # type: ignore
 
     def prepare_request_uri(
         self,
@@ -90,5 +90,13 @@ class WebApplicationClient(_WebApplicationClient):
         code_challenge: str | None = None,
         code_challenge_method: str | None = None,
         **kwargs: Any,
-    ) -> str:
-        ...
+    ) -> str:  # type: ignore
+        return super().prepare_request_uri(  # type: ignore
+            uri=uri,
+            redirect_uri=redirect_uri,
+            scope=scope,
+            state=state,
+            code_challenge=code_challenge,
+            code_challenge_method=code_challenge_method,
+            kwargs=kwargs,
+        )
