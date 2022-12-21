@@ -3,7 +3,7 @@ import pytest
 
 from aiohttp import ClientSession
 
-from aiohttp_oauth_session import OAuth2Session
+from aiohttp_oauth2_session import OAuth2Session
 
 
 @pytest.fixture
