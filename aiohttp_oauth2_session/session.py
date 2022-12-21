@@ -1,18 +1,9 @@
-"""OAuth2 support for aiohttp.ClientSession.
-Based on the requests_oauthlib class
-Based on: https://gist.github.com/kellerza/5ca798f49983bb702bc6e7a05ba53def
-"""
-
-from ssl import SSLContext
-from types import SimpleNamespace
-from typing import Any, Callable, Iterable, Mapping, Awaitable, TypeVar
+from typing import Any, Awaitable, Callable, Mapping, Self
 
 import aiohttp
-from aiohttp.helpers import BasicAuth, sentinel
-from aiohttp.typedefs import Final, JSONEncoder, LooseCookies, LooseHeaders, StrOrURL
+from aiohttp.typedefs import LooseHeaders, StrOrURL
 from oauthlib.oauth2 import InsecureTransportError, TokenExpiredError
 
-# pyright: reportUnusedImport=false
 from .typed_oauthlib import (
     WebApplicationClient,
     generate_token,
@@ -20,23 +11,6 @@ from .typed_oauthlib import (
     urldecode,
 )
 
-# from oauthlib.oauth2 import (
-#     InsecureTransportError,
-#     LegacyApplicationClient,
-#     TokenExpiredError,
-# )
-
-
-# Example token response
-# {
-#   "access_token": "6qrZcUqja7812RVdnEKjpzOL4CvHBFG",
-#   "token_type": "Bearer",
-#   "expires_in": 604800,
-#   "refresh_token": "D43f5y0ahjqew82jZ4NViEr2YafMKhue",
-#   "scope": "identify"
-# }
-
-# Type aliases
 JsonCompatibleDict = Mapping[str, str | int | float | bool | None]
 
 Token = JsonCompatibleDict
@@ -425,3 +399,9 @@ class OAuth2Session(aiohttp.ClientSession):
         for hook in self.compliance_hook[hook_type]:
             hook_data = hook(*hook_data)
         return hook_data
+
+    async def __aenter__(self) -> Self:
+        return self
+
+    async def __aexit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
+        await self.close()

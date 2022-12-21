@@ -1,18 +1,12 @@
 """Some type annotated wrapper's for used oauthlib functions and classes."""
 
 from typing import Any, Mapping
-from oauthlib.common import (
-    generate_token as _generate_token,  # type: ignore
-    urldecode as _urldecode,  # type: ignore
-    UNICODE_ASCII_CHARACTER_SET,
-)
 
-from oauthlib.oauth2 import (
-    WebApplicationClient as _WebApplicationClient,  # type: ignore
-    LegacyApplicationClient as _LegacyApplicationClient,  # type: ignore
-)
 from aiohttp.typedefs import LooseCookies
-
+from oauthlib.common import UNICODE_ASCII_CHARACTER_SET
+from oauthlib.common import generate_token as _generate_token  # type: ignore
+from oauthlib.common import urldecode as _urldecode  # type: ignore
+from oauthlib.oauth2 import WebApplicationClient as _WebApplicationClient
 from oauthlib.oauth2 import is_secure_transport as _is_secure_transport  # type: ignore
 
 Token = Mapping[str, str | int | float | bool | None]
