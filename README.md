@@ -1,6 +1,6 @@
 # aiohttp-oauth2-session
 
-A small package that adds OAuth2 support for aiohttp.ClientSession.
+A fully typed package that adds OAuth2 support for aiohttp.ClientSession.
 
 ## Installation
 

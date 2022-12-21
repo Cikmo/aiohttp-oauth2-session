@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "aiohttp-oauth2-session"
 version = "0.0.0"
-description = "A small package that adds OAuth2 support for aiohttp.ClientSession."
+description = "A fully typed, package that adds OAuth2 support for aiohttp.ClientSession."
 authors = ["Cikmo <59421913+Cikmo@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
