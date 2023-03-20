@@ -22,7 +22,7 @@ aiohttp = "^3.8.3"
 [tool.poetry.group.dev.dependencies]
 black = {version = "^23.1a1", allow-prereleases = true}
 pytest = "^7.2.0"
-pytest-asyncio = "^0.20.3"
+pytest-asyncio = ">=0.20.3,<0.22.0"
 
 [tool.poetry.group.build.dependencies]
 poetry-dynamic-versioning = "^0.21.2"
